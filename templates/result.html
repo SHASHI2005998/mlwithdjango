@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Result</h2>
+
+<p><strong>Email:</strong> {{ object.email }}</p>
+
+{% if object.is_spam %}
+    <h3 style="color:red;">🚫 Spam</h3>
+{% else %}
+    <h3 style="color:green;">✅ Not Spam</h3>
+{% endif %}
+
+<a href="{% url 'home' %}">Try Again</a>
+{% endblock %}
