@@ -2,28 +2,36 @@ from pathlib import Path
 import os
 import dj_database_url
 
+# ========================
+# 📁 BASE DIRECTORY
+# ========================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ========================
 # 🔐 SECURITY
 # ========================
-
 SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# FIXED
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS',
+    'localhost,127.0.0.1,.onrender.com'
+).split(',')
 
-# IMPORTANT for Render
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com"
 ]
 
 # ========================
+# 🔗 URL & WSGI (CRITICAL FIX)
+# ========================
+ROOT_URLCONF = 'mlwithdjango.urls'
+WSGI_APPLICATION = 'mlwithdjango.wsgi.application'
+
+# ========================
 # 📦 INSTALLED APPS
 # ========================
-
 INSTALLED_APPS = [
     'spam_email',
     'django.contrib.admin',
@@ -37,7 +45,6 @@ INSTALLED_APPS = [
 # ========================
 # ⚙️ MIDDLEWARE
 # ========================
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # important
@@ -52,11 +59,10 @@ MIDDLEWARE = [
 # ========================
 # 📁 TEMPLATES
 # ========================
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],  # cleaner
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,7 +78,6 @@ TEMPLATES = [
 # ========================
 # 🌐 DATABASE
 # ========================
-
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
@@ -84,7 +89,6 @@ DATABASES = {
 # ========================
 # 📂 STATIC FILES
 # ========================
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -93,7 +97,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # ========================
 # 🌍 INTERNATIONALIZATION
 # ========================
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -102,5 +105,4 @@ USE_TZ = True
 # ========================
 # 🔑 DEFAULT FIELD
 # ========================
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
